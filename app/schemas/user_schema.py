@@ -18,4 +18,23 @@ class UserSchema(SQLAlchemyAutoSchema):
     def validate_birth_date(self, value, **kwargs):
         if value > date.today():
             raise ValidationError('Birth date cannot be in the future.')
-        # Pas de d'age minimum.
+        # Pas d'age minimum.
+
+class UserUpdateSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        load_instance = False
+        sqla_session = db.session
+        exclude = ('id', 'created_at', 'updated_at')
+
+    # Rendre tous les champs optionnels pour les updates partiels
+    first_name = fields.String(required=False)
+    last_name = fields.String(required=False)
+    email = fields.Email(required=False)
+    birth_date = fields.Date(required=False)
+
+    @validates('birth_date')
+    def validate_birth_date(self, value, **kwargs):
+        if value and value > date.today():  # Vérifier seulement si fourni
+            raise ValidationError('Birth date cannot be in the future.')
+        # Pas d'age minimum

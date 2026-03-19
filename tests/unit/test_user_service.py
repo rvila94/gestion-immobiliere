@@ -48,3 +48,35 @@ class TestUserService:
         """Test récupération utilisateur par ID inexistant."""
         with pytest.raises(ValueError, match="User not found"):
             UserService.get_user_by_id(-1)  # ID qui n'existe pas
+
+    def test_update_user_success(self, app, sample_user):
+        """Test mise à jour utilisateur réussie."""
+        update_data = {"first_name": "Updated", "last_name": "Name"}
+        result = UserService.update_user(sample_user.id, update_data)
+
+        assert result.first_name == "Updated"
+        assert result.last_name == "Name"
+        assert result.email == sample_user.email  # Non modifié
+
+    def test_update_user_email_duplicate(self, app, sample_user):
+        """Test échec update avec email dupliqué."""
+        # Crée un autre user
+        other_user = User(
+            first_name="Other",
+            last_name="User",
+            email="other@example.com",
+            birth_date=datetime.date(1990, 1, 1)
+        )
+        db.session.add(other_user)
+        db.session.commit()
+
+        # Essaie de changer l'email de sample_user vers celui de other_user
+        update_data = {"email": other_user.email}
+        with pytest.raises(ValueError, match="An user with this email already exists"):
+            UserService.update_user(sample_user.id, update_data)
+
+    def test_update_user_not_found(self, app):
+        """Test update utilisateur inexistant."""
+        update_data = {"first_name": "Test"}
+        with pytest.raises(ValueError, match="User not found"):
+            UserService.update_user(-1, update_data)
