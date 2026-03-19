@@ -6,4 +6,4 @@ __pycache__/
 *.pyc
 
 # Fichiers de base de données
-*.db
+instance/real_estate.db
