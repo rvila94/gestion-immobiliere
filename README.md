@@ -4,6 +4,9 @@
     │   ├── api/
     │   │   ├── api.py          # Blueprints registration
     │   │   └── routes/         # API routes
+    │   ├── core/
+    │   │   ├── config.py       # Application configuration
+    │   │   └── extensions.py   # Initialization of Flask extensions
     │   ├── models/             # Data models
     │   ├── schemas/            # Data validation and serialization schemas
     │   └── services/           # Business logic
