@@ -20,3 +20,10 @@ class UserService:
         except IntegrityError as e:
             db.session.rollback()  # Annule les changements
             raise ValueError("Failed to create user.") from e
+        
+    @staticmethod
+    def get_user_by_id(user_id: int):
+        user = User.query.get(user_id)
+        if not user:
+            raise ValueError("User not found")
+        return user

@@ -33,3 +33,13 @@ def create_user():
     # Sérialisation de la réponse
     result = user_schema.dump(user)
     return jsonify(result), 201
+
+@users_bp.route("/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    try:
+        user = UserService.get_user_by_id(user_id)
+    except ValueError as e:
+        return jsonify({"errors": str(e)}), 404
+
+    result = user_schema.dump(user)
+    return jsonify(result), 200

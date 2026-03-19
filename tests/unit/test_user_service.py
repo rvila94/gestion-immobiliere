@@ -35,3 +35,16 @@ class TestUserService:
 
         with pytest.raises(ValueError, match="An user with this email already exists"):
             UserService.create_user(user)
+
+    def test_get_user_by_id_success(self, app, sample_user):
+        """Test récupération utilisateur par ID réussie."""
+        result = UserService.get_user_by_id(sample_user.id)
+
+        assert result.id == sample_user.id
+        assert result.first_name == sample_user.first_name
+        assert result.email == sample_user.email
+
+    def test_get_user_by_id_not_found(self, app):
+        """Test récupération utilisateur par ID inexistant."""
+        with pytest.raises(ValueError, match="User not found"):
+            UserService.get_user_by_id(-1)  # ID qui n'existe pas
