@@ -2,7 +2,6 @@ from marshmallow import validates, ValidationError, fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from app.models.user import User
 from app.core.extensions import db
-import re
 from datetime import date
 
 class UserSchema(SQLAlchemyAutoSchema):
@@ -10,7 +9,7 @@ class UserSchema(SQLAlchemyAutoSchema):
         model = User
         load_instance = True
         sqla_session = db.session
-        exclude = ('created_at', 'updated_at')
+        dump_only  = ('created_at', 'updated_at')
 
     email = fields.Email(required=True)
 
@@ -19,6 +18,7 @@ class UserSchema(SQLAlchemyAutoSchema):
         if value > date.today():
             raise ValidationError('Birth date cannot be in the future.')
         # Pas d'age minimum.
+
 
 class UserUpdateSchema(SQLAlchemyAutoSchema):
     class Meta:

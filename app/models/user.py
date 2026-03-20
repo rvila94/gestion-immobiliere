@@ -13,5 +13,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
+    # Relation avec Property
+    properties = db.relationship("Property", backref="owner", lazy=True)
+
     def __repr__(self):
         return f"<User {self.id} {self.first_name} {self.last_name} {self.email}>"

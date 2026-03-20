@@ -2,6 +2,7 @@ from flask import Flask
 from app.api.api import register_routes
 from app.core.extensions import db, ma
 from app.core.config import Config
+import app.models
 
 app = Flask(__name__)
 app.config.from_object(Config)
