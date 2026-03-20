@@ -8,6 +8,7 @@ properties_bp = Blueprint("properties_bp", __name__, url_prefix="/api/properties
 
 # Schemas
 property_schema = PropertySchema()
+property_list_schema = PropertySchema(many=True)
 
 
 # --------------------------------- Endpoints ---------------------------------
@@ -36,3 +37,25 @@ def create_property():
     # Sérialisation de la réponse
     result = property_schema.dump(property_obj)
     return jsonify(result), 201
+
+
+@properties_bp.route("/city/<string:city>", methods=["GET"])
+def get_properties_by_city(city):
+    """
+    Récupère les propriétés d'une ville avec pagination.
+    Query params : page (int), per_page (int)
+    """
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 20, type=int)
+
+    properties, total, pages = PropertyService.get_properties_by_city(city, page, per_page)
+
+    result = property_list_schema.dump(properties)
+
+    return jsonify({
+        "properties": result,
+        "page": page,
+        "per_page": per_page,
+        "total": total,
+        "total_pages": pages
+    }), 200

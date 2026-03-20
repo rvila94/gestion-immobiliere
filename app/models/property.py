@@ -10,7 +10,7 @@ class Property(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     property_type = db.Column(db.String(50), nullable=False)
-    city = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False, index = True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
